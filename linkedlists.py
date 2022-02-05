@@ -107,7 +107,7 @@ class LinkedList(MutableSequence):
 
     def create_node(self, value: Any) -> Node:
         """Метод, который создает ноду"""  # использую данный метод для того, чтобы не перегружать методы append, insert в DoubleLinkedList
-        return  Node(value)
+        return Node(value)
 
     def to_list(self) -> list:
         """Метод, который формирует список значений нод"""
@@ -154,8 +154,8 @@ class LinkedList(MutableSequence):
     def count(self, item: Any) -> int:
         """Метод, который подсчитывает количество вхождений указанного значения в список"""
         count = 0
-        for node in self.node_iterator():
-            if node.value == item:
+        for value in self:
+            if value == item:
                 count += 1
         return count
 
@@ -168,26 +168,21 @@ class LinkedList(MutableSequence):
     def remove(self, item: Any) -> None:
         """Метод, который удаляет первое вхождение указанного значения"""
         index = self.index(item)
-        self.__delitem__(index)
+        del self[index]    #self.__delitem__(index)
 
     def pop(self, index: int) -> Any:
         """Метод, который удаляет элемент по указаному индексу и возвращает значение этого элемента"""
-        pop_value = self.__getitem__(index)
-        self.__delitem__(index)
+        pop_value = self[index]
+        del self[index]
         return pop_value
 
-    def index(self, value: Any) -> int:
+    def index(self, item: Any) -> int:
         """Метод, который возвращает значение индекса в списке указанного значения"""
-        if self._head is None:
-            raise ValueError("Список пуст")
+        values = iter(self)
 
-        current_node = self._head
-        for index in range(self._len):
-            if current_node.value == value:
+        for index, value in enumerate(values):
+            if value == item:
                 return index
-            current_node = current_node.next
-
-        raise ValueError("Данного значения нет в списке")
 
 
 class DoubleLinkedList(LinkedList):
@@ -366,6 +361,8 @@ if __name__ == '__main__':
     double_linked_list.extend([2, 5, 8])
     print(double_linked_list)
 
+    print(double_linked_list.index(4))
+
     print("Метод pop DLL")
     list_new = [1, 2, 3, 4]
     double_linked_list = DoubleLinkedList(list_new)
@@ -380,4 +377,6 @@ if __name__ == '__main__':
     print(double_linked_list.pop(0))  # last
     print(double_linked_list)
     print('done')
+
+    print(double_linked_list.index(8))
 
