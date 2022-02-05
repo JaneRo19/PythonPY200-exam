@@ -8,10 +8,10 @@ class Node:
         self.value = value
         self._next = next_
 
-    def validate_next(self, next_: Optional["Node"] = None) -> None:
-        """Метод, который проверяет валидность next"""
-        if not isinstance(next_, (type(None), Node)):
-            raise TypeError("Следующее значение ноды имеет неверный тип.")
+    @classmethod
+    def is_node_valid(cls, node):
+        if not isinstance(node, (type(None), cls)):
+            raise TypeError("Значение ноды имеет неверный тип.")
 
     @property
     def next(self):
@@ -19,7 +19,7 @@ class Node:
 
     @next.setter
     def next(self, next_):
-        self.validate_next(next_)
+        self.is_node_valid(next_)
         self._next = next_
 
     def __repr__(self) -> str:
@@ -41,24 +41,13 @@ class DoubleLinkedNode(Node):
         super().__init__(value, next_)
         self.prev = prev
 
-    def validate_next(self, next_: Optional["DoubleLinkedNode"] = None) -> None:
-        """Метод, который определяет валидность в DoubleLinkedNode"""
-        if not isinstance(next_, (type(None), DoubleLinkedNode)):
-            raise TypeError("Следующее значение ноды имеет неверный тип.")
-
-    @staticmethod
-    def validate_prev(prev: Optional["DoubleLinkedNode"] = None) -> None:
-        """Метод, который проверяет валидность prev"""
-        if not isinstance(prev, (type(None), DoubleLinkedNode)):
-            raise TypeError("Предыдущее значение ноды имеет неверный тип.")
-
     @property
     def prev(self):
         return self._prev
 
     @prev.setter
     def prev(self, prev):
-        self.validate_prev(prev)
+        self.is_node_valid(prev)
         self._prev = prev
 
     def __repr__(self) -> str:
