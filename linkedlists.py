@@ -11,11 +11,9 @@ class LinkedList(MutableSequence):
         self._head = None
         self._tail = self._head
 
-        if data is not None:
-            for value in data:
-                self.append(value)
+        self.extend(data)
 
-    def is_valid_index(self, index: int) -> None:
+    def validate_index(self, index: int) -> None:
         """Метод, который проверяет, индекс на правильность значения"""
         if not isinstance(index, int):
             raise TypeError("Указан неверный тип индекса, нужен int")
@@ -27,7 +25,7 @@ class LinkedList(MutableSequence):
         Метод, который осуществляет перемещение по узлам до указанного индекса
         и возвращает значение
         """
-        self.is_valid_index(index)
+        self.validate_index(index)
 
         current_node = self._head
         for _ in range(index):
@@ -42,21 +40,21 @@ class LinkedList(MutableSequence):
     def __getitem__(self, index: int) -> Any:
         """Метод, который возвращает значение узла по оуказанному индексу"""
 
-        self.is_valid_index(index)
+        self.validate_index(index)
         node = self.step_by_step_on_nodes(index)
         return node.value
 
     def __setitem__(self, index: int, value: Any) -> None:
         """Метод, который устанавливает значение узла по указанному индексу"""
 
-        self.is_valid_index(index)
+        self.validate_index(index)
         node = self.step_by_step_on_nodes(index)
         node.value = value
 
     def __delitem__(self, index: int) -> None:
         """Метод, который удаляет элемент по указанному индексу"""
 
-        self.is_valid_index(index)
+        self.validate_index(index)
 
         if index == 0:
             self._head = self._head.next
@@ -109,8 +107,7 @@ class LinkedList(MutableSequence):
 
     def create_node(self, value: Any) -> Node:
         """Метод, который создает ноду"""  # использую данный метод для того, чтобы не перегружать методы append, insert в DoubleLinkedList
-        new_node = Node(value)
-        return new_node
+        return  Node(value)
 
     def to_list(self) -> list:
         """Метод, который формирует список значений нод"""
@@ -162,10 +159,11 @@ class LinkedList(MutableSequence):
                 count += 1
         return count
 
-    def extend(self, values: Any) -> None:
+    def extend(self, values: Iterable) -> None:
         """Метод, который добавляет в конец списка несколько элементов"""
-        for index in range(len(values)):
-            self.append(values[index])
+        if values is not None:
+            for value in values:
+                self.append(value)
 
     def remove(self, item: Any) -> None:
         """Метод, который удаляет первое вхождение указанного значения"""
@@ -202,8 +200,7 @@ class DoubleLinkedList(LinkedList):
 
     def create_node(self, value: Any) -> DoubleLinkedNode:
         """Метод, который создает ноду"""
-        new_node = DoubleLinkedNode(value)
-        return new_node
+        return DoubleLinkedNode(value)
 
     def reversed_iter_nodes(self) -> Iterator:
         """Метод, который проходит по всем узлам нод"""
@@ -215,7 +212,7 @@ class DoubleLinkedList(LinkedList):
     def __delitem__(self, index: int) -> None:   # переопределила этот метод для того, чтобы при удалении не было ссылок prev
         """Метод, который удаляет элемент по указанному индексу"""
 
-        self.is_valid_index(index)
+        self.validate_index(index)
 
         if index == 0:
             current_node_del = self._head
@@ -264,15 +261,15 @@ if __name__ == '__main__':
     print(linked_list[2] == "abc")
 
     print("Метод __len__ LL")
-    print(linked_list.__len__())
+    print(len(linked_list))
 
     print("Метод __delitem__ LL")
-    linked_list.__delitem__(3)
+    del linked_list[2]
     print(linked_list)
-    print(linked_list.__len__())
+    print(len(linked_list))
 
     print("Метод __repr__ LL")
-    print(linked_list.__repr__)
+    print(repr(linked_list))
 
     # print(linked_list.index("a"))
 
@@ -280,15 +277,15 @@ if __name__ == '__main__':
     print(linked_list.pop(0))
 
     print("Метод __iter__ LL")
-    iterator = linked_list.__iter__()
+    iterator = iter(linked_list)
     for i in iterator:
         print(i)
 
     print("Метод __contains__ LL")
-    print(linked_list.__contains__(3))
+    print(3 in linked_list)
 
     print("Метод __reversed__ LL")
-    revers_iterator = linked_list.__reversed__()
+    revers_iterator = reversed(linked_list)
     for i in revers_iterator:
         print(i)
 
@@ -302,6 +299,11 @@ if __name__ == '__main__':
     print("Метод remove LL")
     linked_list.append(2)
     linked_list.remove(2)
+    print(linked_list)
+
+    print("Append и Extend 'abc'")
+    linked_list.append("abc")
+    linked_list.extend("abc")
     print(linked_list)
 
     print('----------------------------------------------')
@@ -330,26 +332,26 @@ if __name__ == '__main__':
     print(double_linked_list[2] == "abc")
 
     print("Метод __len__ DLL")
-    print(double_linked_list.__len__())
+    print(len(double_linked_list))
 
     print("Метод __delitem__ DLL")
-    double_linked_list.__delitem__(3)
+    del double_linked_list[3]
     print(double_linked_list)
-    print(double_linked_list.__len__())
+    print(len(double_linked_list))
 
     print("Метод __repr__ DLL")
-    print(double_linked_list.__repr__)
+    print(repr(double_linked_list))
 
     print("Метод __iter__ DLL")
-    iterator = double_linked_list.__iter__()
+    iterator = iter(double_linked_list)
     for i in iterator:
         print(i)
 
     print("Метод __contains__ DLL")
-    print(double_linked_list.__contains__(8))
+    print(8 in double_linked_list)
 
     print("Метод __reversed__ DLL")
-    revers_iterator = double_linked_list.__reversed__()
+    revers_iterator = reversed(double_linked_list)
     for i in revers_iterator:
         print(i)
 

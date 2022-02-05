@@ -2,13 +2,13 @@ from typing import Any, Optional
 
 
 class Node:
+
     """ Класс, который описывает узел связного списка. """
     def __init__(self, value: Any, next_: Optional["Node"] = None):
         self.value = value
         self._next = next_
 
-    @staticmethod
-    def is_next_valid(next_: Optional["Node"] = None) -> None:
+    def validate_next(self, next_: Optional["Node"] = None) -> None:
         """Метод, который проверяет валидность next"""
         if not isinstance(next_, (type(None), Node)):
             raise TypeError("Следующее значение ноды имеет неверный тип.")
@@ -19,7 +19,7 @@ class Node:
 
     @next.setter
     def next(self, next_):
-        self.is_next_valid(next_)
+        self.validate_next(next_)
         self._next = next_
 
     def __repr__(self) -> str:
@@ -41,8 +41,13 @@ class DoubleLinkedNode(Node):
         super().__init__(value, next_)
         self.prev = prev
 
+    def validate_next(self, next_: Optional["DoubleLinkedNode"] = None) -> None:
+        """Метод, который определяет валидность в DoubleLinkedNode"""
+        if not isinstance(next_, (type(None), DoubleLinkedNode)):
+            raise TypeError("Следующее значение ноды имеет неверный тип.")
+
     @staticmethod
-    def is_prev_valid(prev: Optional["DoubleLinkedNode"] = None) -> None:
+    def validate_prev(prev: Optional["DoubleLinkedNode"] = None) -> None:
         """Метод, который проверяет валидность prev"""
         if not isinstance(prev, (type(None), DoubleLinkedNode)):
             raise TypeError("Предыдущее значение ноды имеет неверный тип.")
@@ -53,7 +58,7 @@ class DoubleLinkedNode(Node):
 
     @prev.setter
     def prev(self, prev):
-        self.is_prev_valid(prev)
+        self.validate_prev(prev)
         self._prev = prev
 
     def __repr__(self) -> str:
